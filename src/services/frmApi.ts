@@ -1,0 +1,10 @@
+import { apiGet } from './api';
+import type { DashboardData } from '../types/api';
+export const getFrmDashboard = (signal?: AbortSignal) => apiGet<DashboardData>('/dashboard/frm', signal);
+export const getTerritoryCases = (signal?: AbortSignal) => apiGet('/frm/territory-cases', signal);
+export const getCasesByRegion = (signal?: AbortSignal) => apiGet('/frm/cases-by-region', signal);
+export const getTopPayers = (signal?: AbortSignal) => apiGet('/frm/top-payers', signal);
+export const getTopBarriers = (signal?: AbortSignal) => apiGet('/frm/top-barriers', signal);
+export const getProviderAccounts = (signal?: AbortSignal) => apiGet('/frm/provider-accounts', signal);
+export const getSlaRisk = (signal?: AbortSignal) => apiGet('/frm/sla-risk', signal);
+export const getHubFollowUps = (signal?: AbortSignal) => apiGet('/frm/hub-follow-ups', signal);
