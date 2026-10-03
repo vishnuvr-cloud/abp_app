@@ -57,6 +57,12 @@ For each row, create the HTTP method and route key, then attach the Lambda integ
 | `GET` | `/fc/pending-documents` | Explicit unavailable response; no document table exists |
 | `GET` | `/fc/resource-workload` | Workload grouped by assigned user |
 
+## Local synthetic preview data
+
+When running Vite in development with no usable `VITE_API_BASE_URL`, the SPA uses a small in-memory fixture set so you can review populated layouts. A visible **DEMO DATA** badge marks this mode. The fixtures are client-side only; they do not write to or seed the database. They include a few sample document/provider rows strictly to preview those UI panels even though those entities are not present in the supplied schema.
+
+The toggle is `VITE_USE_DEMO_DATA` in the root `.env.local` file. Use `true` to enable local preview fixtures or `false` to show the unconfigured-API state. The code also defaults to preview mode during local development when the variable is unset and no Gateway URL is configured. Set a real `VITE_API_BASE_URL` and restart Vite: real API requests take precedence over fixtures regardless of the toggle. For deployment, Vite production builds do not enable synthetic data.
+
 Use API Gateway **Lambda proxy integration** so the Lambda receives the path/method and API Gateway forwards its JSON response and status code. If your existing backend already has these read routes, integrate those routes to that backend and align `src/services` paths to its published contract instead of deploying the optional Lambda.
 
 If the existing API uses a JWT/Cognito/custom authorizer, attach that existing authorizer to the protected GET routes. This presentation handler does not establish user identity or replace the backend's authorization policy; keep access control at the existing API Gateway/backend boundary.
@@ -81,9 +87,10 @@ In the project root, copy `.env.example` to `.env.local` for local development a
 
 ```env
 VITE_API_BASE_URL=https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/dev
+VITE_USE_DEMO_DATA=false
 ```
 
-Restart the Vite server after changing the variable. All frontend services use the single `src/config/api.ts` configuration and do not contain AWS credentials.
+Restart the Vite server after changing the variables. Set `VITE_USE_DEMO_DATA=false` to explicitly disable the local fixtures; once a real Gateway URL is configured, the API service automatically uses it instead of fixtures. All frontend services use the single `src/config/api.ts` configuration and do not contain AWS credentials.
 
 ## 7. Run and build locally
 
